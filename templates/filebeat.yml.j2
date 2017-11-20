@@ -56,23 +56,20 @@ output:
     # Elasticsearch. The default is 15 seconds.
     #topology_expire: 15
 
-{% if filebeat_ssl_certificate_file and filebeat_ssl_key_file %}
+{% if filebeat_ssl %}
     # tls configuration. By default is off.
-    tls:
+    ssl:
       # List of root certificates for HTTPS server verifications
-      #certificate_authorities: ["/etc/pki/root/ca.pem"]
+      certificate_authorities: ["{{ filebeat_ssl_dir }}/{{ filebeat_ssl_certificate_authority | basename }}"]
 
       # Certificate for TLS client authentication
       certificate: "{{ filebeat_ssl_dir }}/{{ filebeat_ssl_certificate_file | basename }}"
 
       # Client Certificate Key
-      certificate_key: "{{ filebeat_ssl_dir }}/{{ filebeat_ssl_key_file | basename}}"
+      key: "{{ filebeat_ssl_dir }}/{{ filebeat_ssl_key_file | basename}}"
 
       # Controls whether the client verifies server certificates and host name.
-      # If insecure is set to true, all server host names and certificates will be
-      # accepted. In this mode TLS based connections are susceptible to
-      # man-in-the-middle attacks. Use only for testing.
-      insecure: {{ filebeat_ssl_insecure }}
+      verification_mode: {{ filebeat_ssl_verification_mode }}
 
       # Configure cipher suites to be used for TLS connections
       #cipher_suites: []
@@ -80,11 +77,8 @@ output:
       # Configure curve types for ECDHE based cipher suites
       #curve_types: []
 
-      # Configure minimum TLS version allowed for connection to logstash
-      #min_version: 1.0
-
-      # Configure maximum TLS version allowed for connection to logstash
-      #max_version: 1.2
+      # Configure TLS protocols allowed for connection to logstash
+      #supported_protocols: [TLSv1.0, TLSv1.1, TLSv1.2]
 {% endif %}
 {% endif %}
 
@@ -105,30 +99,29 @@ output:
     # top topbeat and for Filebeat to filebeat.
     #index: filebeat
 
-{% if filebeat_ssl_certificate_file and filebeat_ssl_key_file %}
+{% if filebeat_ssl %}
     # Optional TLS. By default is off.
-    tls:
+    ssl:
       # List of root certificates for HTTPS server verifications
-      #certificate_authorities: ["/etc/pki/root/ca.pem"]
+      certificate_authorities: ["{{ filebeat_ssl_dir }}/{{ filebeat_ssl_certificate_authority | basename }}"]
 
       # Certificate for TLS client authentication
       certificate: "{{ filebeat_ssl_dir }}/{{ filebeat_ssl_certificate_file | basename }}"
 
       # Client Certificate Key
-      certificate_key: "{{ filebeat_ssl_dir }}/{{ filebeat_ssl_key_file | basename}}"
+      key: "{{ filebeat_ssl_dir }}/{{ filebeat_ssl_key_file | basename}}"
 
       # Controls whether the client verifies server certificates and host name.
-      # If insecure is set to true, all server host names and certificates will be
-      # accepted. In this mode TLS based connections are susceptible to
-      # man-in-the-middle attacks. Use only for testing.
-      #insecure: true
-      insecure: {{ filebeat_ssl_insecure }}
+      verification_mode: {{ filebeat_ssl_verification_mode }}
 
       # Configure cipher suites to be used for TLS connections
       #cipher_suites: []
 
       # Configure curve types for ECDHE based cipher suites
       #curve_types: []
+
+      # Configure TLS protocols allowed for connection to logstash
+      #supported_protocols: [TLSv1.0, TLSv1.1, TLSv1.2]
 {% endif %}
 
 {% if filebeat_enable_logging %}

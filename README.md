@@ -44,12 +44,17 @@ Filebeat logging.
 
     filebeat_ssl_dir: /etc/pki/logstash
 
-The path where certificates and keyfiles will be stored.
+The path where CA, certificates and keyfiles will be stored.
 
+    filebeat_ssl_certificate_authority: ""
     filebeat_ssl_certificate_file: ""
     filebeat_ssl_key_file: ""
 
-Local paths to the SSL certificate and key files, which will be copied into the `filebeat_ssl_dir`.
+Local paths to the CA, SSL certificate and key files, which will be copied into the `filebeat_ssl_dir`.
+
+    filebeat_ssl: true
+
+Finally, turn on ssl for filebeat.
 
 For utmost security, you should use your own valid certificate and keyfile, and update the `filebeat_ssl_*` variables in your playbook to use your certificate.
 
@@ -59,9 +64,9 @@ To generate a self-signed certificate/key pair, you can use use the command:
 
 Note that filebeat and logstash may not work correctly with self-signed certificates unless you also have the full chain of trust (including the Certificate Authority for your self-signed cert) added on your server. See: https://github.com/elastic/logstash/issues/4926#issuecomment-203936891
 
-    filebeat_ssl_insecure: "false"
+    filebeat_ssl_verification_mode: "full"
 
-Set this to `"true"` to allow the use of self-signed certificates (when a CA isn't available).
+Set this to `"none"` to allow the use of self-signed certificates (when a CA isn't available).
 
 ## Dependencies
 
