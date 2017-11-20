@@ -22,9 +22,8 @@
   with_items:
     - "{{ filebeat_ssl_key_file }}"
     - "{{ filebeat_ssl_certificate_file }}"
-    - "{{ filebeat_ssl_certificate_authority }}"
   notify: restart filebeat
-  when: filebeat_ssl_key_file and filebeat_ssl_certificate_file
+  when: filebeat_ssl and filebeat_ssl_key_file is defined and filebeat_ssl_certificate_file is defined
 
 - name: Copy ca for filebeat.
   copy:
@@ -34,4 +33,4 @@
   with_items:
     - "{{ filebeat_ssl_certificate_authority }}"
   notify: restart filebeat
-  when: filebeat_ssl
+  when: filebeat_ssl and filebeat_ssl_certificate_authority is defined
